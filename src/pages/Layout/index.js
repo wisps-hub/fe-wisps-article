@@ -1,12 +1,15 @@
 import { Layout, Menu, Popconfirm } from "antd";
+import './index.scss'
 import {
     HomeOutlined,
     DiffOutlined,
     EditOutlined,
     LogoutOutlined
 } from '@ant-design/icons'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import './index.scss'
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo, clearUserInfo } from "@/store/modules/user";
 
 const {Header, Sider} = Layout
 
@@ -28,25 +31,31 @@ const items = [
     }
 ]
 
-const MLayout = () => {
+const GeekLayout = () => {
     const navigate = useNavigate()
 
-    //获取用户信息
-    const nickName = 'admin'
-
-    //退出
-    const doLogout = ()=>{
-
+    // 点击菜单事件
+    const onMenuClick = (route)=>{
+        const path = route.key
+        navigate(path)
     }
 
     // 获取当前路径路由
     const location = useLocation()
     const selectedKey = location.pathname
 
-    //切换菜单
-    const onMenuClick = (router)=>{
-        console.log('onMenuClick', router)
-        navigate(router.key)
+    //获取用户信息
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(fetchUserInfo());
+    }, [dispatch])
+
+    const nickName = useSelector(state => state.user.userInfo.nickName)
+
+    //执行退出
+    const doLogout = () => {
+        dispatch(clearUserInfo())
+        navigate("/login")
     }
 
     return (
@@ -81,4 +90,4 @@ const MLayout = () => {
     )
 }
 
-export default MLayout
+export default GeekLayout

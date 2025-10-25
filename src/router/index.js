@@ -10,8 +10,7 @@ const { createBrowserRouter } = require("react-router-dom");
 const router = createBrowserRouter([
     {
         path: '/',
-        element:<Layout />,
-        // element:<AuthRouter><Layout /></AuthRouter>,
+        element:<AuthRouter><Layout /></AuthRouter>,
         children: [
             {
                 path: "/",
